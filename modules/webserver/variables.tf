@@ -5,3 +5,4 @@ variable env_prefix {}
 variable instance_type {}
 variable subnet_id {}
 variable public_key_location {}
+variable availability_zone {}

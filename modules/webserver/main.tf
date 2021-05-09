@@ -54,10 +54,11 @@ resource "aws_instance" "test-server" {
 
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.test-sg.id]
-  availability_zone      = "us-east-1a"
+  availability_zone      = var.availability_zone
 
   associate_public_ip_address = true
   key_name                    = aws_key_pair.test-ssh-key.key_name
+
 
   user_data = file("entry-docker-script.sh")
 
@@ -82,3 +83,120 @@ resource "aws_instance" "test-server" {
   }
 
 }
+
+# resource "aws_iam_role" "test-role-ssm" {
+#   name = "test_role-ssm"
+
+#   # Terraform's "jsonencode" function converts a
+#   # Terraform expression result to valid JSON syntax.
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Action = "sts:AssumeRole"
+#         Effect = "Allow"
+#         Sid    = ""
+#         Principal = {
+#           Service = "ec2.amazonaws.com"
+#         }
+#       },
+#     ]
+#   }{
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "ssm:DescribeAssociation",
+#                 "ssm:GetDeployablePatchSnapshotForInstance",
+#                 "ssm:GetDocument",
+#                 "ssm:DescribeDocument",
+#                 "ssm:GetManifest",
+#                 "ssm:GetParameters",
+#                 "ssm:ListAssociations",
+#                 "ssm:ListInstanceAssociations",
+#                 "ssm:PutInventory",
+#                 "ssm:PutComplianceItems",
+#                 "ssm:PutConfigurePackageResult",
+#                 "ssm:UpdateAssociationStatus",
+#                 "ssm:UpdateInstanceAssociationStatus",
+#                 "ssm:UpdateInstanceInformation"
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "ssmmessages:CreateControlChannel",
+#                 "ssmmessages:CreateDataChannel",
+#                 "ssmmessages:OpenControlChannel",
+#                 "ssmmessages:OpenDataChannel"         
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "ec2messages:AcknowledgeMessage",
+#                 "ec2messages:DeleteMessage",
+#                 "ec2messages:FailMessage",
+#                 "ec2messages:GetEndpoint",
+#                 "ec2messages:GetMessages",
+#                 "ec2messages:SendReply"
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "cloudwatch:PutMetricData"
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "ec2:DescribeInstanceStatus"
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "ds:CreateComputer",
+#                 "ds:DescribeDirectories"
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "logs:CreateLogGroup",
+#                 "logs:CreateLogStream",
+#                 "logs:DescribeLogGroups",
+#                 "logs:DescribeLogStreams",
+#                 "logs:PutLogEvents"
+#             ],
+#             "Resource": "*"
+#         },
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "s3:GetBucketLocation",
+#                 "s3:PutObject",
+#                 "s3:GetObject",
+#                 "s3:GetEncryptionConfiguration",
+#                 "s3:AbortMultipartUpload",
+#                 "s3:ListMultipartUploadParts",
+#                 "s3:ListBucket",
+#                 "s3:ListBucketMultipartUploads"
+#             ],
+#             "Resource": "*"
+#         }
+#     ]
+# })
+
+#   tags = {
+#     Name = "test-role-ssm"
+#   }
+# }
