@@ -1,3 +1,7 @@
-# output "subnet" {
-#   value = aws_subnet.test-subnet-1
-# }
+output "subnet_private_a" {
+  value = aws_subnet.private_a.id
+}
+
+output "subnet_private_b" {
+  value = aws_subnet.private_b.id
+}

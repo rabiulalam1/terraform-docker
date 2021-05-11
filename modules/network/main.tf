@@ -121,6 +121,7 @@ resource "aws_subnet" "private_a" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.subnet_cidr_block_private_a
   availability_zone = "${var.region}a"
+  
   tags = {
     Name : "${terraform.workspace}-private-subnet-a"
   }

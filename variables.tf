@@ -17,15 +17,9 @@ variable "subnet_cidr_block_public_a" {
 variable "subnet_cidr_block_public_b" {}
 variable "subnet_cidr_block_private_a" {}
 variable "subnet_cidr_block_private_b" {}
-# variable "availability_zone" {}
-# variable "my_ip" {}
-# variable "instance_type" {}
-# variable "public_key_location" {}
-# variable "entry_script_location" {}
-# variable "image_name" {}
-# variable "access_key" {}
-# variable "secret_key" {}
-# variable "token" {}
+variable "db_username" {}
+variable "db_password" {}
+
 variable "project" {
   default = "Terraform"
 }

@@ -40,6 +40,14 @@ module "network" {
   subnet_cidr_block_private_b = var.subnet_cidr_block_private_b
 }
 
+module "database" {
+  source = "./modules/database"
+  db_username = var.db_username
+  db_password = var.db_password
+  subnet_private_a = module.network.subnet_private_a
+  subnet_private_b = module.network.subnet_private_b
+}
+
 # module "test-subnet" {
 #   source            = "./modules/subnet"
 #   subnet_cidr_block = var.subnet_cidr_block
