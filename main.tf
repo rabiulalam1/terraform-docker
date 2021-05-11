@@ -20,7 +20,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-data aws_region "current" {}
+data "aws_region" "current" {}
 
 module "bastion-server" {
   source = "./modules/bastion"
@@ -31,10 +31,13 @@ module "bastion-server" {
 }
 
 module "network" {
-    source              = "./modules/network"
-    region = data.aws_region.current.name
-    vpc_cidr_block = var.vpc_cidr_block
-    subnet_cidr_block = var.subnet_cidr_block
+  source                      = "./modules/network"
+  region                      = data.aws_region.current.name
+  vpc_cidr_block              = var.vpc_cidr_block
+  subnet_cidr_block_public_a  = var.subnet_cidr_block_public_a
+  subnet_cidr_block_public_b  = var.subnet_cidr_block_public_b
+  subnet_cidr_block_private_a = var.subnet_cidr_block_private_a
+  subnet_cidr_block_private_b = var.subnet_cidr_block_private_b
 }
 
 # module "test-subnet" {
