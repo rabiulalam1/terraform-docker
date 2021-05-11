@@ -1,0 +1,4 @@
+Step
+    - "docker-compose -f ./docker-compose.yml run --rm terraform init"
+    - "docker-compose -f ./docker-compose.yml run --rm terraform fmt"
+    - "docker-compose -f ./docker-compose.yml run --rm terraform workspace new test"

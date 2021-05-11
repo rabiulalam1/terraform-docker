@@ -1,47 +1,60 @@
 terraform {
   backend "s3" {
-    bucket = "rabiul-test-tfstate"
-    key = "test-app.tfstate"
-    region = "us-east-1"
-    encrypt = true
-    dynamodb_table  = "rabiul-tfstate-lock"
+    bucket         = "rabiul-test-tfstate"
+    key            = "test-app.tfstate"
+    region         = "us-east-1"
+    encrypt        = true
+    dynamodb_table = "rabiul-tfstate-lock"
   }
-  
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.39.0"
+    }
+  }
+
+  required_version = "~> 0.15"
 }
 
 provider "aws" {
-  region     = var.region
-  version = "~> 3.39.0"
-  access_key = var.access_key
-  secret_key = var.secret_key
-  token      = var.token
+  region = "us-east-1"
 }
 
-resource "aws_vpc" "test-vpc" {
-  cidr_block = var.vpc_cidr_block
-  tags = {
-    Name : "${var.env_prefix}-vpc"
+data aws_region "current" {}
+
+module "bastion-server" {
+  source = "./modules/bastion"
+  env_prefix = {
+    Project  = var.project
+    Snapshot = var.snapshot
   }
 }
 
-module "test-subnet" {
-  source            = "./modules/subnet"
-  subnet_cidr_block = var.subnet_cidr_block
-  env_prefix        = var.env_prefix
-  vpc_id            = aws_vpc.test-vpc.id
+module "network" {
+    source              = "./modules/network"
+    region = data.aws_region.current.name
+    vpc_cidr_block = var.vpc_cidr_block
+    subnet_cidr_block = var.subnet_cidr_block
 }
 
-module "test-server" {
-  source              = "./modules/webserver"
-  image_name          = var.image_name
-  vpc_id              = aws_vpc.test-vpc.id
-  my_ip               = var.my_ip
-  env_prefix          = var.env_prefix
-  instance_type       = var.instance_type
-  subnet_id           = module.test-subnet.subnet.id
-  public_key_location = var.public_key_location
-  availability_zone = var.availability_zone
-}
+# module "test-subnet" {
+#   source            = "./modules/subnet"
+#   subnet_cidr_block = var.subnet_cidr_block
+#   env_prefix        = var.env_prefix
+#   vpc_id            = aws_vpc.test-vpc.id
+# }
+
+# module "test-server" {
+#   source              = "./modules/webserver"
+#   image_name          = var.image_name
+#   vpc_id              = aws_vpc.test-vpc.id
+#   my_ip               = var.my_ip
+#   env_prefix          = var.env_prefix
+#   instance_type       = var.instance_type
+#   subnet_id           = module.test-subnet.subnet.id
+#   public_key_location = var.public_key_location
+#   availability_zone   = var.availability_zone
+# }
 
 # resource "aws_cloudwatch_dashboard" "main" {
 #   dashboard_name = "test-dashboard"

@@ -14,13 +14,19 @@ variable "subnet_cidr_block" {
   # })
   # )
 }
-variable availability_zone {}
-variable "env_prefix" {}
-variable "my_ip" {}
-variable "instance_type" {}
-variable "public_key_location" {}
-variable "entry_script_location" {}
-variable "image_name" {}
-variable "access_key" {}
-variable "secret_key" {}
-variable "token" {}
+# variable "availability_zone" {}
+# variable "my_ip" {}
+# variable "instance_type" {}
+# variable "public_key_location" {}
+# variable "entry_script_location" {}
+# variable "image_name" {}
+# variable "access_key" {}
+# variable "secret_key" {}
+# variable "token" {}
+variable "project" {
+  default = "Terraform"
+}
+
+variable "snapshot" {
+  default = true
+}
